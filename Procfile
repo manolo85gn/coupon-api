@@ -1,0 +1,1 @@
+web: target/start com.winbits.api.coupon.server.Main
