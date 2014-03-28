@@ -16,6 +16,6 @@ object Main extends App  {
   val host = config.getString("service.host")
   val port = config.getInt("service.port")
 
-  val service = system.actorOf(Props(new RestInterface()), "httpInterface")
+  val service = system.actorOf(Props(new RestInterface()), "couponInterface")
   IO(Http) ! Http.Bind(service, interface = host, port = port)
 }

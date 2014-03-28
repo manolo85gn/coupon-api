@@ -32,8 +32,10 @@ class CouponDBActor extends Actor with ActorLogging {
 
   def receive: Receive = {
     case CouponRequest(id:Long) =>
-      log.info(s"Getting a ticket for the ${id} event.")
-      sender ! CouponDAO.get(id)
+      log.info(s"Getting a coupon for id ${id} .")
+      val coupon = CouponDAO.get(id)
+      log.info(s"Coupon: ${coupon.toString} .")
+      sender ! coupon
   }
 
 }

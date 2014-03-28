@@ -28,21 +28,9 @@ trait RestApi extends HttpService with ActorLogging { actor: Actor =>
   import akka.pattern.pipe
   import context._
 
-  val couponDBActor = context.actorOf(Props[CouponDBActor])
+  val couponDBActor = context.actorOf(Props[CouponDBActor],"couponDB_Actor")
 
   def routes: Route =
-    /*
-    path("coupon") {
-
-      get {
-          entity(as[CouponRequest]) { couponRequest => requestContext =>
-            log.info(s"Getting a ticket for the ${couponRequest.id} event.")
-            val responder = createResponder(requestContext)
-            couponDBActor.ask(couponRequest).pipeTo(responder)
-          }
-      }
-
-    } */
     path("coupon" / PathElement) { couponId => requestContext =>
       val req = CouponRequest(couponId.toLong)
       val responder = createResponder(requestContext)
@@ -62,8 +50,13 @@ class Responder(requestContext:RequestContext, couponMaster:ActorRef) extends Ac
 
   def receive = {
 
-    case coupon:Coupon =>
+    case Right(coupon:Coupon) =>
+      log.info(s"construyendo respuesta ${coupon}")
       requestContext.complete(StatusCodes.OK, coupon)
+      self ! PoisonPill
+
+    case Left(errorMsg) =>
+      requestContext.complete(StatusCodes.NotFound)
       self ! PoisonPill
   }
 }
