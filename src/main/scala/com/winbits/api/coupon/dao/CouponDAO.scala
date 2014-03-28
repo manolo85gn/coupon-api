@@ -12,6 +12,7 @@ object CouponDAO extends  MySqlSupport {
 
   def get(id: Long): Either[Failure, Coupon] = {
     try {
+
       db.withSession {
         Coupons.findById(id).firstOption match {
           case Some(coupon: Coupon) =>
@@ -20,6 +21,7 @@ object CouponDAO extends  MySqlSupport {
             Left(notFoundError(id))
         }
       }
+
     } catch {
       case e: SQLException =>
         Left(databaseError(e))

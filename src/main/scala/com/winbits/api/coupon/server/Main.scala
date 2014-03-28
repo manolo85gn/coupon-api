@@ -8,7 +8,7 @@ import spray.can.Http
 /**
  * Created by manuel on 3/25/14.
  */
-object Main extends App {
+object Main extends App  {
 
   implicit val system = ActorSystem("on-spray-can")
 
