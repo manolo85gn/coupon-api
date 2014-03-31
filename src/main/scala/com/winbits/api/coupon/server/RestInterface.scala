@@ -31,7 +31,7 @@ trait RestApi extends HttpService with ActorLogging { actor: Actor =>
   val couponDBActor = context.actorOf(Props[CouponDBActor],"couponDB_Actor")
 
   def routes: Route =
-    path("coupon" / PathElement) { couponId => requestContext =>
+    path("coupon" / Segment) { couponId => requestContext =>
       val req = CouponRequest(couponId.toLong)
       val responder = createResponder(requestContext)
       couponDBActor.ask(req).pipeTo(responder)
